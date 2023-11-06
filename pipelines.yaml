@@ -1,0 +1,16 @@
+server:
+  host: 127.0.0.1
+  port: 7000
+  jwtSecret: secret
+  notificationCommand: |
+    curl -X POST https://api.telegram.org/bot<telegram_token>/sendMessage -d chat_id=<chat_id> -d text="$MESSAGE"
+  workers: 1
+pipelines:
+  - name: bridge
+    repository: git@github.com:skdziwak/ts3-telegram-bridge-v2.git
+    script: |
+      set -e
+      cp /etc/micro-ci/configs/bridge/config.yaml .
+      docker build --tag ts3-telegram-bridge .
+      docker rm -f ts3-telegram-bridge || true
+      docker run --name ts3-telegram-bridge --network mongonet --restart always -d ts3-telegram-bridge
