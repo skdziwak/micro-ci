@@ -20,7 +20,7 @@ if [ ! -f "$PROGRAM_NAME" ]; then
 fi
 if [ "$REBUILD" = true ]; then
   echo "Building the binary..."
-  go build -o ${PROGRAM_NAME} main.go
+  go build -o ${PROGRAM_NAME} .
 fi
 
 if systemctl is-active --quiet ${SERVICE_NAME}; then
