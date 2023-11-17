@@ -162,6 +162,7 @@ func main() {
       log.Fatal("Failed to get private key path for", pipeline.Name, ":", err)
     }
     http.HandleFunc("/" + pipeline.Name, func(w http.ResponseWriter, r *http.Request) {
+      pipeline := pipeline
       if r.Method != http.MethodPost {
         log.Println("Invalid method:", r.Method)
         w.WriteHeader(http.StatusMethodNotAllowed)
