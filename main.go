@@ -161,8 +161,8 @@ func main() {
     if err != nil {
       log.Fatal("Failed to get private key path for", pipeline.Name, ":", err)
     }
+    p := pipeline
     http.HandleFunc("/" + pipeline.Name, func(w http.ResponseWriter, r *http.Request) {
-      pipeline := pipeline
       if r.Method != http.MethodPost {
         log.Println("Invalid method:", r.Method)
         w.WriteHeader(http.StatusMethodNotAllowed)
@@ -187,8 +187,8 @@ func main() {
         w.WriteHeader(http.StatusUnauthorized)
         return
       }
-      task := Task{pipeline: &pipeline}
-      channel <- task
+      log.Println("Received request for pipeline:", p.Name)
+      channel <- Task{pipeline: &p}
       w.WriteHeader(http.StatusOK)
     })
   }
